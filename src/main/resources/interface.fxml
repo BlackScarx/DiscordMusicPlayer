@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" stylesheets="style.css"
+            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="net.blackscarx.discordmusicplayer.Interface">
+    <VBox layoutX="430.0" layoutY="170.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <MenuBar>
+            <menus>
+                <Menu mnemonicParsing="false" text="Bot">
+                    <MenuItem mnemonicParsing="false" onAction="#showInfo" text="%info"/>
+                    <MenuItem mnemonicParsing="false" onAction="#renameBot" text="%renameBot"/>
+                    <MenuItem mnemonicParsing="false" onAction="#logout" text="%logout"/>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Playlist">
+                    <MenuItem mnemonicParsing="false" onAction="#clearPlaylist" text="%clearPlaylist"/>
+                    <MenuItem mnemonicParsing="false" onAction="#loadPlaylist" text="%loadPlaylist"/>
+                    <MenuItem mnemonicParsing="false" onAction="#savePlaylist" text="%savePlaylist"/>
+                </Menu>
+                <Menu mnemonicParsing="false" text="%about">
+                    <MenuItem mnemonicParsing="false" onAction="#showAbout" text="%about"/>
+                    <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate"/>
+                    <MenuItem mnemonicParsing="false" onAction="#licence" text="Licence"/>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <HBox alignment="CENTER" prefHeight="100000.0" prefWidth="100000.0">
+            <AnchorPane prefHeight="100000.0" prefWidth="100000.0">
+                <ComboBox fx:id="guilds" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="170.0"
+                          promptText="%chooseGuild"/>
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="190.0" layoutY="14.0" onMouseClicked="#addGuild"
+                           pickOnBounds="true" preserveRatio="true">
+                    <effect>
+                        <DropShadow color="#ffffffcd" spread="0.08"/>
+                    </effect>
+                    <Image url="@img/addserver.png"/>
+                </ImageView>
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="222.0" layoutY="14.0" onMouseClicked="#refresh"
+                           pickOnBounds="true" preserveRatio="true">
+                    <effect>
+                        <DropShadow color="#ffffffcd" spread="0.08"/>
+                    </effect>
+                    <Image url="@img/refresh.png"/>
+                </ImageView>
+                <ComboBox fx:id="channels" layoutX="253.0" layoutY="14.0" prefHeight="25.0" prefWidth="170.0"
+                          promptText="%chooseChannel"/>
+                <Button layoutX="434.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#connect" text="Go"/>
+            </AnchorPane>
+            <AnchorPane prefHeight="100000.0" prefWidth="100000.0">
+                <TextField fx:id="link" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="384.0"/>
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="407.0" layoutY="14.0" onMouseClicked="#fileEx"
+                           pickOnBounds="true" preserveRatio="true">
+                    <Image url="@img/file.png"/>
+                    <effect>
+                        <DropShadow color="#ffffffcd"/>
+                    </effect>
+                </ImageView>
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="441.0" layoutY="14.0" onMouseClicked="#addLink"
+                           pickOnBounds="true" preserveRatio="true">
+                    <Image url="@img/addserver.png"/>
+                    <effect>
+                        <DropShadow color="#ffffffcd"/>
+                    </effect>
+                </ImageView>
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="52.0" onMouseClicked="#play"
+                           pickOnBounds="true" preserveRatio="true">
+                    <effect>
+                        <DropShadow color="#ffffffcd" spread="0.08"/>
+                    </effect>
+                    <Image url="@img/play.png"/>
+                </ImageView>
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="46.0" layoutY="52.0" onMouseClicked="#pause"
+                           pickOnBounds="true" preserveRatio="true">
+                    <effect>
+                        <DropShadow color="#ffffffcd" spread="0.08"/>
+                    </effect>
+                    <Image url="@img/pause.png"/>
+                </ImageView>
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="77.0" layoutY="52.0" onMouseClicked="#next"
+                           pickOnBounds="true" preserveRatio="true">
+                    <effect>
+                        <DropShadow color="#ffffffcd" spread="0.08"/>
+                    </effect>
+                    <Image url="@img/next.png"/>
+                </ImageView>
+                <TableView fx:id="playList" layoutX="15.0" layoutY="91.0" prefHeight="410.0" prefWidth="450.0"
+                           onMouseClicked="#showOption">
+                    <columns>
+                        <TableColumn fx:id="id" prefWidth="30" text="id"/>
+                        <TableColumn fx:id="name" prefWidth="300" text="%musicName"/>
+                        <TableColumn fx:id="duration" prefWidth="105" text="%duration"/>
+                    </columns>
+                </TableView>
+                <ProgressBar fx:id="progress" layoutX="121.0" layoutY="68.0" prefHeight="10.0" prefWidth="345.0"/>
+                <Label fx:id="info" alignment="CENTER" contentDisplay="CENTER" layoutX="121.0" layoutY="44.0"
+                       prefHeight="17.0" prefWidth="345.0" text="%noMusic" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+                <Slider fx:id="volume" layoutY="91.0" orientation="VERTICAL" prefHeight="410.0" prefWidth="14.0"
+                        value="40.0"/>
+            </AnchorPane>
+        </HBox>
+    </VBox>
+</AnchorPane>
