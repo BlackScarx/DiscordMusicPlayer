@@ -284,7 +284,7 @@ public class Interface implements Initializable {
     public void showAbout() {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
         about.setTitle(DiscordMusicPlayer.lang.getString("about"));
-        about.setContentText("Author: BlackScarx\nVersion: 3.1.0");
+        about.setContentText("Author: BlackScarx\nVersion: 3.2.1");
         about.showAndWait();
     }
 

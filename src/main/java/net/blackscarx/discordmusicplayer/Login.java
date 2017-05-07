@@ -14,7 +14,10 @@ import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.controlsfx.dialog.ExceptionDialog;
 
 import javax.security.auth.login.LoginException;
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -26,6 +29,7 @@ public class Login implements Initializable {
     public TextField tokenField;
     public Button loginButton;
     public Button cancelButton;
+    public Button createbot;
 
     public void login(MouseEvent mouseEvent) throws IOException {
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
@@ -63,4 +67,15 @@ public class Login implements Initializable {
         tokenField.setText(Config.config.token);
     }
 
+    public void openCreatebot(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://discordapp.com/developers/applications/me/create"));
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
 }

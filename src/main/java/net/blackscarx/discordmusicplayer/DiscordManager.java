@@ -147,6 +147,8 @@ public class DiscordManager {
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
+                } else {
+                    Interface.instance.link.setText("");
                 }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -172,6 +174,8 @@ public class DiscordManager {
         if (player.getPlayingTrack() != null && !playList.isEmpty()) {
             boolean isPaused = player.isPaused();
             player.playTrack(playList.remove(0).audioTrack);
+            AudioTrack audioTrack = player.getPlayingTrack();
+            DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
             player.setPaused(isPaused);
         }
     }
@@ -222,6 +226,8 @@ public class DiscordManager {
             if (endReason.equals(AudioTrackEndReason.FINISHED)) {
                 if (!playList.isEmpty()) {
                     player.playTrack(playList.remove(0).audioTrack);
+                    AudioTrack audioTrack = player.getPlayingTrack();
+                    DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
                 }
             }
         }
@@ -238,6 +244,8 @@ public class DiscordManager {
         public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
             if (!playList.isEmpty()) {
                 player.playTrack(playList.remove(0).audioTrack);
+                AudioTrack audioTrack = player.getPlayingTrack();
+                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
             }
         }
 
@@ -247,9 +255,11 @@ public class DiscordManager {
 
         String noMusic = DiscordMusicPlayer.lang.getString("noMusic");
         String title;
+        int i = 0;
+        boolean isTitle = false;
 
         public void setTitle(AudioTrack audioTrack) {
-            title = !audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName();
+            title = !audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'));
         }
 
         @Override
@@ -258,11 +268,25 @@ public class DiscordManager {
                 if (player.getPlayingTrack() != null) {
                     AudioTrack audioTrack = player.getPlayingTrack();
                     setTitle(audioTrack);
+                    if (i == 0) {
+                        DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(title));
+                        isTitle = true;
+                    } else if (i == 150) {
+                        DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
+                        isTitle = false;
+                    } else if (i == 200) {
+                        i = -1;
+                    }
+                    i++;
                     Platform.runLater(() -> {
                         Interface.instance.info.setText(title);
                         Interface.instance.progress.setProgress((double) audioTrack.getPosition() / (double) audioTrack.getDuration());
                     });
                 } else {
+                    if (isTitle) {
+                        DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
+                        isTitle = false;
+                    }
                     Platform.runLater(() -> {
                         Interface.instance.info.setText(noMusic);
                         Interface.instance.progress.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
@@ -273,6 +297,10 @@ public class DiscordManager {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+            if (isTitle) {
+                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
+                isTitle = false;
             }
             Platform.runLater(() -> {
                 Interface.instance.info.setText(noMusic);

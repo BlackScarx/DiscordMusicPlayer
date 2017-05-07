@@ -19,7 +19,7 @@ public class AudioTrackView {
     public AudioTrackView(AudioTrack audioTrack) {
         this.audioTrack = audioTrack;
         id = DiscordMusicPlayer.manager.playList.size() + 1;
-        name = !audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName();
+        name = !audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'));
         duration = Utils.getFormattedTime(audioTrack.getDuration());
     }
 
