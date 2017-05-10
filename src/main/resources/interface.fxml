@@ -12,23 +12,22 @@
     <VBox layoutX="430.0" layoutY="170.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <MenuBar>
-            <menus>
-                <Menu mnemonicParsing="false" text="Bot">
-                    <MenuItem mnemonicParsing="false" onAction="#showInfo" text="%info"/>
-                    <MenuItem mnemonicParsing="false" onAction="#renameBot" text="%renameBot"/>
-                    <MenuItem mnemonicParsing="false" onAction="#logout" text="%logout"/>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Playlist">
-                    <MenuItem mnemonicParsing="false" onAction="#clearPlaylist" text="%clearPlaylist"/>
-                    <MenuItem mnemonicParsing="false" onAction="#loadPlaylist" text="%loadPlaylist"/>
-                    <MenuItem mnemonicParsing="false" onAction="#savePlaylist" text="%savePlaylist"/>
-                </Menu>
-                <Menu mnemonicParsing="false" text="%about">
-                    <MenuItem mnemonicParsing="false" onAction="#showAbout" text="%about"/>
-                    <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate"/>
-                    <MenuItem mnemonicParsing="false" onAction="#licence" text="Licence"/>
-                </Menu>
-            </menus>
+            <Menu mnemonicParsing="false" text="Bot">
+                <MenuItem mnemonicParsing="false" onAction="#showInfo" text="%info"/>
+                <MenuItem mnemonicParsing="false" onAction="#renameBot" text="%renameBot"/>
+                <MenuItem mnemonicParsing="false" onAction="#showSettings" text="%settings"/>
+                <MenuItem mnemonicParsing="false" onAction="#logout" text="%logout"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Playlist">
+                <MenuItem mnemonicParsing="false" onAction="#clearPlaylist" text="%clearPlaylist"/>
+                <MenuItem mnemonicParsing="false" onAction="#loadPlaylist" text="%loadPlaylist"/>
+                <MenuItem mnemonicParsing="false" onAction="#savePlaylist" text="%savePlaylist"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="%about">
+                <MenuItem mnemonicParsing="false" onAction="#showAbout" text="%about"/>
+                <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate"/>
+                <MenuItem mnemonicParsing="false" onAction="#licence" text="Licence"/>
+            </Menu>
         </MenuBar>
         <HBox alignment="CENTER" prefHeight="100000.0" prefWidth="100000.0">
             <AnchorPane prefHeight="100000.0" prefWidth="100000.0">

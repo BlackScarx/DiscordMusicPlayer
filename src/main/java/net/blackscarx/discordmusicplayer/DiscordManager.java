@@ -1,7 +1,5 @@
 package net.blackscarx.discordmusicplayer;
 
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -45,19 +43,19 @@ import java.util.concurrent.Future;
 /**
  * Created by BlackScarx on 02-05-17. BlackScarx All right reserved
  */
-public class DiscordManager {
+class DiscordManager {
 
-    public JDA jda;
-    public String guildId;
-    public String channelId;
-    public AudioPlayerManager remoteManager = new DefaultAudioPlayerManager();
-    public AudioPlayerManager localManager = new DefaultAudioPlayerManager();
-    public AudioPlayer player = remoteManager.createPlayer();
-    public AudioPlayerSendHandler handler = new AudioPlayerSendHandler(player);
-    public ObservableList<AudioTrackView> playList = FXCollections.observableArrayList();
-    public boolean noMatch = false;
+    JDA jda;
+    String guildId;
+    String channelId;
+    ObservableList<AudioTrackView> playList = FXCollections.observableArrayList();
+    private AudioPlayerManager remoteManager = new DefaultAudioPlayerManager();
+    private AudioPlayerManager localManager = new DefaultAudioPlayerManager();
+    private AudioPlayer player = remoteManager.createPlayer();
+    private AudioPlayerSendHandler handler = new AudioPlayerSendHandler(player);
+    private boolean noMatch = false;
 
-    public DiscordManager(String token) throws LoginException, InterruptedException, RateLimitedException {
+    DiscordManager(String token) throws LoginException, InterruptedException, RateLimitedException {
         try {
             jda = new JDABuilder(AccountType.BOT).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
         } catch (AccountTypeException e) {
@@ -70,15 +68,15 @@ public class DiscordManager {
         player.addListener(new Musique());
     }
 
-    public List<Guild> getGuilds() {
+    List<Guild> getGuilds() {
         return jda.getGuilds();
     }
 
-    public List<VoiceChannel> getChannelsGuild(String guildId) {
+    List<VoiceChannel> getChannelsGuild(String guildId) {
         return jda.getGuildById(guildId).getVoiceChannels();
     }
 
-    public void connectGuild(String guildId) {
+    void connectGuild(String guildId) {
         if (this.guildId != null) {
             disconnectGuild();
         }
@@ -86,12 +84,12 @@ public class DiscordManager {
         jda.getGuildById(guildId).getAudioManager().setSendingHandler(handler);
     }
 
-    public void disconnectChannel() {
+    void disconnectChannel() {
         jda.getGuildById(guildId).getAudioManager().closeAudioConnection();
         channelId = null;
     }
 
-    public void disconnectGuild() {
+    void disconnectGuild() {
         if (channelId != null)
             disconnectChannel();
         if (guildId != null) {
@@ -100,7 +98,7 @@ public class DiscordManager {
         }
     }
 
-    public void connectChannel(String channelId) throws PermissionException {
+    void connectChannel(String channelId) throws PermissionException {
         try {
             jda.getGuildById(guildId).getAudioManager().openAudioConnection(jda.getVoiceChannelById(channelId));
             this.channelId = channelId;
@@ -109,54 +107,49 @@ public class DiscordManager {
         }
     }
 
-    public void addSource(String source, boolean isRemote, boolean wait) {
+    void addSource(String source, boolean isRemote) {
         Future<Void> add = !isRemote ? localManager.loadItem(source, new AudioLoad()) : remoteManager.loadItem(source, new AudioLoad());
-        if (wait) {
-            try {
-                add.get();
-                if (noMatch) {
-                    noMatch = false;
-                    YouTube youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
-                        @Override
-                        public void initialize(HttpRequest httpRequest) throws IOException {
-                        }
-                    }).setApplicationName("DiscordMusicPlayer").build();
-                    try {
-                        YouTube.Search.List search = youtube.search().list("id,snippet");
-                        search.setKey("AIzaSyBbS5X3Cf5yJilL5c2m9D3-pX72dRTLdhw");
-                        search.setQ(source);
-                        search.setType("video");
-                        search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/high/url)");
-                        search.setMaxResults(10L);
-                        SearchListResponse searchResponse = search.execute();
-                        List<SearchResult> searchResultList = searchResponse.getItems();
-                        if (searchResultList != null) {
-                            for (SearchResult result : searchResultList) {
-                                if (result.getId().getKind().equals("youtube#video")) {
-                                    ButtonType i = Utils.showDialog(result.getSnippet().getThumbnails().getHigh().getUrl(), DiscordMusicPlayer.lang.getString("doUMean") + result.getSnippet().getTitle());
-                                    if (i == ButtonType.YES) {
-                                        addSource(result.getId().getVideoId(), true, true);
-                                        Interface.instance.link.setText("");
-                                        return;
-                                    } else if (i == ButtonType.CANCEL || i == ButtonType.CLOSE) {
-                                        return;
-                                    }
+        try {
+            add.get();
+            if (noMatch) {
+                noMatch = false;
+                YouTube youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), httpRequest -> {
+                }).setApplicationName("DiscordMusicPlayer").build();
+                try {
+                    YouTube.Search.List search = youtube.search().list("id,snippet");
+                    search.setKey("AIzaSyBbS5X3Cf5yJilL5c2m9D3-pX72dRTLdhw");
+                    search.setQ(source);
+                    search.setType("video");
+                    search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/high/url)");
+                    search.setMaxResults(10L);
+                    SearchListResponse searchResponse = search.execute();
+                    List<SearchResult> searchResultList = searchResponse.getItems();
+                    if (searchResultList != null) {
+                        for (SearchResult result : searchResultList) {
+                            if (result.getId().getKind().equals("youtube#video")) {
+                                ButtonType i = Utils.showDialog(result.getSnippet().getThumbnails().getHigh().getUrl(), DiscordMusicPlayer.lang.getString("doUMean") + "  " + result.getSnippet().getTitle());
+                                if (i == ButtonType.YES) {
+                                    addSource(result.getId().getVideoId(), true);
+                                    Interface.instance.link.setText("");
+                                    return;
+                                } else if (i == ButtonType.CANCEL || i == ButtonType.CLOSE) {
+                                    return;
                                 }
                             }
                         }
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
                     }
-                } else {
-                    Interface.instance.link.setText("");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
                 }
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+            } else {
+                Interface.instance.link.setText("");
             }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
     }
 
-    public void play() {
+    void play() {
         if (player.isPaused() && player.getPlayingTrack() != null) {
             player.setPaused(false);
         } else if (!playList.isEmpty() && player.getPlayingTrack() == null) {
@@ -164,13 +157,13 @@ public class DiscordManager {
         }
     }
 
-    public void pause() {
+    void pause() {
         if (!player.isPaused() && player.getPlayingTrack() != null) {
             player.setPaused(true);
         }
     }
 
-    public void next() {
+    void next() {
         if (player.getPlayingTrack() != null && !playList.isEmpty()) {
             boolean isPaused = player.isPaused();
             player.playTrack(playList.remove(0).audioTrack);
@@ -180,14 +173,14 @@ public class DiscordManager {
         }
     }
 
-    public void stop() {
+    void stop() {
         if (player.getPlayingTrack() != null)
             player.stopTrack();
         if (!playList.isEmpty())
             playList.clear();
     }
 
-    public void setVolume(int volume) {
+    void setVolume(int volume) {
         player.setVolume(volume);
     }
 
@@ -258,7 +251,7 @@ public class DiscordManager {
         int i = 0;
         boolean isTitle = false;
 
-        public void setTitle(AudioTrack audioTrack) {
+        void setTitle(AudioTrack audioTrack) {
             title = !audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'));
         }
 

@@ -41,7 +41,7 @@ public class Playlist implements Serializable {
         public Boolean isRemote;
         public String identifier;
 
-        public Properties(Boolean isRemote, String identifier) {
+        Properties(Boolean isRemote, String identifier) {
             this.isRemote = isRemote;
             this.identifier = identifier;
         }

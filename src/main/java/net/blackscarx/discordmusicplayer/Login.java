@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.StageStyle;
 import net.blackscarx.discordmusicplayer.object.Config;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.controlsfx.dialog.ExceptionDialog;
@@ -44,10 +45,12 @@ public class Login implements Initializable {
                 e.printStackTrace();
                 if (e instanceof LoginException) {
                     Alert warn = new Alert(Alert.AlertType.WARNING, DiscordMusicPlayer.lang.getString("errorLogin"));
+                    warn.initStyle(StageStyle.UTILITY);
                     warn.setTitle(DiscordMusicPlayer.lang.getString("error"));
                     warn.showAndWait();
                 } else {
                     ExceptionDialog error = new ExceptionDialog(e);
+                    error.initStyle(StageStyle.UTILITY);
                     error.setTitle(DiscordMusicPlayer.lang.getString("error"));
                     error.setHeaderText(DiscordMusicPlayer.lang.getString("error"));
                     error.showAndWait();

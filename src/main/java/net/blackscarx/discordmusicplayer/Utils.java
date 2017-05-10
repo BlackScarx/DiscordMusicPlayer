@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.stage.StageStyle;
 import net.blackscarx.discordmusicplayer.object.Playlist;
 
 import java.awt.*;
@@ -21,7 +22,7 @@ import java.util.Date;
  */
 public class Utils {
 
-    public static javafx.scene.image.Image makeRoundedCorner(BufferedImage image, int cornerRadius) {
+    static javafx.scene.image.Image makeRoundedCorner(BufferedImage image) {
         int w = image.getWidth();
         int h = image.getHeight();
         BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
@@ -29,7 +30,7 @@ public class Utils {
         g2.setComposite(AlphaComposite.Src);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.WHITE);
-        g2.fill(new RoundRectangle2D.Float(0, 0, w, h, cornerRadius, cornerRadius));
+        g2.fill(new RoundRectangle2D.Float(0, 0, w, h, 15, 15));
         g2.setComposite(AlphaComposite.SrcAtop);
         g2.drawImage(image, 0, 0, null);
         g2.dispose();
@@ -43,7 +44,7 @@ public class Utils {
         return wr;
     }
 
-    public static void savePlaylist(Playlist playlist, File file) {
+    static void savePlaylist(Playlist playlist, File file) {
         try {
             FileOutputStream out = new FileOutputStream(file);
             ObjectOutputStream object = new ObjectOutputStream(out);
@@ -55,7 +56,7 @@ public class Utils {
         }
     }
 
-    public static Playlist loadPlaylist(File file) {
+    static Playlist loadPlaylist(File file) {
         try {
             FileInputStream in = new FileInputStream(file);
             ObjectInputStream object = new ObjectInputStream(in);
@@ -74,8 +75,9 @@ public class Utils {
         return new Playlist();
     }
 
-    public static ButtonType showDialog(String message, String title) {
+    static ButtonType showDialog(String message, String title) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        alert.initStyle(StageStyle.UTILITY);
         alert.setTitle(title);
         alert.setContentText("");
         alert.getDialogPane().setHeader(new ImageView(new Image(message)));
