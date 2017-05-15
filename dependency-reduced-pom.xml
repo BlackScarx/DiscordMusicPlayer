@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.blackscarx</groupId>
     <artifactId>discordmusicplayer</artifactId>
-    <version>3.2.1-BETA</version>
+    <version>3.3.1-BETA</version>
     <build>
         <plugins>
             <plugin>
