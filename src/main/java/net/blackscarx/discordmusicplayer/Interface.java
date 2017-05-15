@@ -1,5 +1,6 @@
 package net.blackscarx.discordmusicplayer;
 
+import com.google.common.base.Strings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -11,13 +12,18 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 import net.blackscarx.discordmusicplayer.object.AudioTrackView;
+import net.blackscarx.discordmusicplayer.object.Config;
 import net.blackscarx.discordmusicplayer.object.Playlist;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
@@ -28,6 +34,7 @@ import org.controlsfx.dialog.ExceptionDialog;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -50,7 +57,9 @@ public class Interface implements Initializable {
     public ComboBox<Guild> guilds;
     public ComboBox<VoiceChannel> channels;
     public Slider volume;
-    private ChangeListener<Guild> changeGuild = new ChangeListener<Guild>() {
+    public ImageView playPause;
+    public AnchorPane mainPane;
+    ChangeListener<Guild> changeGuild = new ChangeListener<Guild>() {
         @Override
         public void changed(ObservableValue<? extends Guild> observable, Guild oldValue, Guild newValue) {
             if (newValue == null)
@@ -75,6 +84,13 @@ public class Interface implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (Strings.isNullOrEmpty(Config.config.background)) {
+            InputStream in = DiscordMusicPlayer.class.getResourceAsStream("/img/background.txt");
+            byte[] imgB = Utils.inputStreamToByteArray(in);
+            Config.config.background = new String(imgB);
+            Config.save();
+        }
+        mainPane.setBackground(Utils.getBackground(Utils.stringToImage(Config.config.background)));
         id.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getTableView().getItems().indexOf(param.getValue()) + 1));
         name.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().name));
         duration.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().duration));
@@ -109,12 +125,6 @@ public class Interface implements Initializable {
         volume.valueProperty().addListener(changeVolume);
     }
 
-    public void play(MouseEvent mouseEvent) {
-        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-            DiscordMusicPlayer.manager.play();
-        }
-    }
-
     public void fileEx(MouseEvent mouseEvent) {
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
             FileChooser fileChooser = new FileChooser();
@@ -137,12 +147,6 @@ public class Interface implements Initializable {
         }
     }
 
-    public void pause(MouseEvent mouseEvent) {
-        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-            DiscordMusicPlayer.manager.pause();
-        }
-    }
-
     public void next(MouseEvent mouseEvent) {
         if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
             DiscordMusicPlayer.manager.next();
@@ -154,6 +158,10 @@ public class Interface implements Initializable {
             if (channels.getValue() != null) {
                 try {
                     DiscordMusicPlayer.manager.connectChannel(channels.getValue().getId());
+                    Alert connected = new Alert(Alert.AlertType.INFORMATION, DiscordMusicPlayer.lang.getString("loggedMessage") + " " + channels.getValue().getName());
+                    connected.initStyle(StageStyle.UTILITY);
+                    connected.setTitle(DiscordMusicPlayer.lang.getString("logged"));
+                    connected.showAndWait();
                 } catch (PermissionException e) {
                     Alert permEx = new Alert(Alert.AlertType.WARNING, DiscordMusicPlayer.lang.getString("errorPermission"));
                     permEx.initStyle(StageStyle.UTILITY);
@@ -305,12 +313,12 @@ public class Interface implements Initializable {
         licence.initStyle(StageStyle.UTILITY);
         licence.setTitle("Licence");
         VBox vBox = new VBox();
-        Label label = new Label("Licence Creative Commons");
-        Hyperlink hyperlink = new Hyperlink("Creative Commons");
+        Label label = new Label("This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.\nTo view a copy of this license, visit");
+        Hyperlink hyperlink = new Hyperlink("http://creativecommons.org/licenses/by-nc-nd/4.0/.");
         hyperlink.setOnMouseClicked(event -> {
             if (Desktop.isDesktopSupported()) {
                 try {
-                    Desktop.getDesktop().browse(new URI("https://creativecommons.org/licenses/by-nc-sa/4.0/"));
+                    Desktop.getDesktop().browse(new URI("http://creativecommons.org/licenses/by-nc-nd/4.0/"));
                 } catch (IOException | URISyntaxException e1) {
                     e1.printStackTrace();
                 }
@@ -323,6 +331,31 @@ public class Interface implements Initializable {
     }
 
     public void showSettings() throws IOException {
+        Parent settings = FXMLLoader.load(DiscordMusicPlayer.class.getResource("/settings.fxml"), DiscordMusicPlayer.lang);
+        Scene scene = new Scene(settings);
+        Stage stage = new Stage(StageStyle.UTILITY);
+        stage.initOwner(DiscordMusicPlayer.instance.stage);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.setScene(scene);
+        stage.setTitle(DiscordMusicPlayer.lang.getString("settings"));
+        Settings.settings = stage;
+        stage.showAndWait();
+    }
 
+    public void playPause(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+            if (DiscordMusicPlayer.manager.isPlaying()) {
+                DiscordMusicPlayer.manager.pause();
+            } else {
+                DiscordMusicPlayer.manager.play();
+            }
+        }
+    }
+
+    public void stop(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+            DiscordMusicPlayer.manager.stop();
+        }
     }
 }

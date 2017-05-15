@@ -6,6 +6,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundSize;
 import javafx.stage.StageStyle;
 import net.blackscarx.discordmusicplayer.object.Playlist;
 
@@ -15,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 
 /**
@@ -96,6 +100,39 @@ public class Utils {
             durString = durString.replaceFirst(h.format(dur), String.valueOf((Integer.valueOf(h.format(dur)) - 1)));
         }
         return durString;
+    }
+
+    static String imageToString(File file) throws IOException {
+        FileInputStream in = new FileInputStream(file);
+        byte[] bImg = new byte[(int) file.length()];
+        in.read(bImg);
+        in.close();
+        return Base64.getEncoder().encodeToString(bImg);
+    }
+
+    static Image stringToImage(String string) {
+        byte[] bImg = Base64.getDecoder().decode(string);
+        return new Image(new ByteArrayInputStream(bImg));
+    }
+
+    static byte[] inputStreamToByteArray(InputStream in) {
+        byte[] byteArray = new byte[1024];
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int read;
+            while ((read = in.read()) != -1)
+                out.write(read);
+            byteArray = out.toByteArray();
+            out.close();
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return byteArray;
+    }
+
+    static Background getBackground(Image image) {
+        return new Background(new BackgroundImage(image, null, null, null, new BackgroundSize(960, 540, false, false, false, false)));
     }
 
 }

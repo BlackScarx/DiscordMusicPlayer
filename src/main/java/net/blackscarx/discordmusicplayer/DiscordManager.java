@@ -20,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
 import net.blackscarx.discordmusicplayer.object.AudioPlayerSendHandler;
 import net.blackscarx.discordmusicplayer.object.AudioTrackView;
 import net.dv8tion.jda.core.AccountType;
@@ -184,6 +185,13 @@ class DiscordManager {
         player.setVolume(volume);
     }
 
+    boolean isPlaying() {
+        if (player.getPlayingTrack() != null)
+            if (!player.isPaused())
+                return true;
+        return false;
+    }
+
     class AudioLoad implements AudioLoadResultHandler {
 
         @Override
@@ -216,6 +224,7 @@ class DiscordManager {
 
         @Override
         public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+            Interface.instance.playPause.setImage(new Image("/img/play.png"));
             if (endReason.equals(AudioTrackEndReason.FINISHED)) {
                 if (!playList.isEmpty()) {
                     player.playTrack(playList.remove(0).audioTrack);
@@ -227,6 +236,7 @@ class DiscordManager {
 
         @Override
         public void onTrackStart(AudioPlayer player, AudioTrack track) {
+            Interface.instance.playPause.setImage(new Image("/img/pause.png"));
             if (timer == null) {
                 timer = new Timer();
                 timer.start();
@@ -242,6 +252,15 @@ class DiscordManager {
             }
         }
 
+        @Override
+        public void onPlayerPause(AudioPlayer player) {
+            Interface.instance.playPause.setImage(new Image("/img/play.png"));
+        }
+
+        @Override
+        public void onPlayerResume(AudioPlayer player) {
+            Interface.instance.playPause.setImage(new Image("/img/pause.png"));
+        }
     }
 
     class Timer extends Thread implements Runnable {
