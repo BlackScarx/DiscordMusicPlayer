@@ -18,11 +18,14 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
+import javafx.stage.StageStyle;
 import net.blackscarx.discordmusicplayer.object.AudioPlayerSendHandler;
 import net.blackscarx.discordmusicplayer.object.AudioTrackView;
+import net.blackscarx.discordmusicplayer.object.Config;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -34,7 +37,6 @@ import net.dv8tion.jda.core.exceptions.PermissionException;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import javax.security.auth.login.LoginException;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -61,9 +63,15 @@ class DiscordManager {
             jda = new JDABuilder(AccountType.BOT).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
         } catch (AccountTypeException e) {
             jda = new JDABuilder(AccountType.CLIENT).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
-            JOptionPane.showMessageDialog(null, DiscordMusicPlayer.lang.getString("warningClient"), DiscordMusicPlayer.lang.getString("warningClientTitle"), JOptionPane.WARNING_MESSAGE);
+            Alert alert = new Alert(Alert.AlertType.WARNING, DiscordMusicPlayer.lang.getString("warningClient"));
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setTitle(DiscordMusicPlayer.lang.getString("warningClientTitle"));
+            alert.showAndWait();
         }
-        jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
+        if (Config.config.botGame.equals(""))
+            jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
+        else
+            jda.getPresence().setGame(Game.of(Config.config.botGame));
         AudioSourceManagers.registerRemoteSources(remoteManager);
         AudioSourceManagers.registerLocalSource(localManager);
         player.addListener(new Musique());
@@ -169,7 +177,8 @@ class DiscordManager {
             boolean isPaused = player.isPaused();
             player.playTrack(playList.remove(0).audioTrack);
             AudioTrack audioTrack = player.getPlayingTrack();
-            DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
+            if (Config.config.botGame.equals(""))
+                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
             player.setPaused(isPaused);
         }
     }
@@ -226,11 +235,7 @@ class DiscordManager {
         public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
             Interface.instance.playPause.setImage(new Image("/img/play.png"));
             if (endReason.equals(AudioTrackEndReason.FINISHED)) {
-                if (!playList.isEmpty()) {
-                    player.playTrack(playList.remove(0).audioTrack);
-                    AudioTrack audioTrack = player.getPlayingTrack();
-                    DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
-                }
+                next();
             }
         }
 
@@ -245,11 +250,7 @@ class DiscordManager {
 
         @Override
         public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
-            if (!playList.isEmpty()) {
-                player.playTrack(playList.remove(0).audioTrack);
-                AudioTrack audioTrack = player.getPlayingTrack();
-                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
-            }
+            next();
         }
 
         @Override
@@ -260,6 +261,15 @@ class DiscordManager {
         @Override
         public void onPlayerResume(AudioPlayer player) {
             Interface.instance.playPause.setImage(new Image("/img/pause.png"));
+        }
+
+        private void next() {
+            if (!playList.isEmpty()) {
+                player.playTrack(playList.remove(0).audioTrack);
+                AudioTrack audioTrack = player.getPlayingTrack();
+                if (Config.config.botGame.equals(""))
+                    DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
+            }
         }
     }
 
@@ -281,7 +291,10 @@ class DiscordManager {
                     AudioTrack audioTrack = player.getPlayingTrack();
                     setTitle(audioTrack);
                     if (i == 0) {
-                        DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(title));
+                        if (Config.config.botGame.equals(""))
+                            DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(title));
+                        else
+                            DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Config.config.botGame));
                         isTitle = true;
                     } else if (i == 150) {
                         DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));

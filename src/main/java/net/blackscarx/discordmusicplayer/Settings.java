@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import net.blackscarx.discordmusicplayer.object.Config;
+import net.dv8tion.jda.core.entities.Game;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
@@ -31,6 +32,7 @@ public class Settings implements Initializable {
     public ComboBox<ResourceBundle> langs;
     public AnchorPane main;
     public TextField background;
+    public TextField botGame;
     private String backgroundString = null;
 
     @Override
@@ -50,6 +52,7 @@ public class Settings implements Initializable {
             }
         });
         langs.setValue(DiscordMusicPlayer.lang);
+        botGame.setText(Config.config.botGame);
     }
 
     public void close(MouseEvent mouseEvent) {
@@ -63,6 +66,9 @@ public class Settings implements Initializable {
             DiscordMusicPlayer.lang = langs.getValue();
             StringBuilder builder = new StringBuilder(langs.getValue().getBaseBundleName());
             Config.config.lang = builder.substring(builder.length() - 2);
+            Config.config.botGame = botGame.getText();
+            if (!botGame.getText().equals(""))
+                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(botGame.getText()));
             if (backgroundString != null) {
                 Config.config.background = backgroundString;
                 Interface.instance.mainPane.setBackground(Utils.getBackground(Utils.stringToImage(backgroundString)));

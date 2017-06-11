@@ -19,6 +19,7 @@ public class Config implements Serializable {
     public String token = "";
     public String background = "";
     public String lang = "";
+    public String botGame = "";
 
     public static void load() {
         if (!saveFile.exists() || !saveFile.isDirectory()) {
