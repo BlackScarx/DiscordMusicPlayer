@@ -29,6 +29,7 @@ import net.blackscarx.discordmusicplayer.object.Config;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
@@ -107,13 +108,9 @@ class DiscordManager {
         }
     }
 
-    void connectChannel(String channelId) throws PermissionException {
-        try {
-            jda.getGuildById(guildId).getAudioManager().openAudioConnection(jda.getVoiceChannelById(channelId));
-            this.channelId = channelId;
-        } catch (PermissionException e) {
-            throw new PermissionException(e.getPermission(), e.getMessage());
-        }
+    void connectChannel(String channelId) {
+        jda.getGuildById(guildId).getAudioManager().openAudioConnection(jda.getVoiceChannelById(channelId));
+        this.channelId = channelId;
     }
 
     void addSource(String source, boolean isRemote) {

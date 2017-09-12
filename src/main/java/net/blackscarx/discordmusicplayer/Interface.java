@@ -235,7 +235,7 @@ public class Interface implements Initializable {
         DiscordMusicPlayer.manager.setVolume(40);
         playList.getItems().clear();
         volume.setValue(40);
-        DiscordMusicPlayer.manager.jda.shutdown(false);
+        DiscordMusicPlayer.manager.jda.shutdown();
         Parent login = FXMLLoader.load(DiscordMusicPlayer.class.getResource("/login.fxml"), DiscordMusicPlayer.lang);
         DiscordMusicPlayer.instance.stage.setScene(new Scene(login));
     }

@@ -27,7 +27,7 @@ public class DiscordMusicPlayer extends Application {
     Stage stage;
     private EventHandler<WindowEvent> close = event -> {
         if (manager != null)
-            manager.jda.shutdown(true);
+            manager.jda.shutdown();
         System.exit(0);
     };
 
