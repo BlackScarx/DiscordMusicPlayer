@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -59,6 +60,7 @@ public class Interface implements Initializable {
     public Slider volume;
     public ImageView playPause;
     public AnchorPane mainPane;
+    public CheckMenuItem repeatCheck;
     ChangeListener<Guild> changeGuild = new ChangeListener<Guild>() {
         @Override
         public void changed(ObservableValue<? extends Guild> observable, Guild oldValue, Guild newValue) {
@@ -358,4 +360,5 @@ public class Interface implements Initializable {
             DiscordMusicPlayer.manager.stop();
         }
     }
+
 }

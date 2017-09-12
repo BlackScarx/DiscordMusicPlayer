@@ -159,7 +159,10 @@ class DiscordManager {
         if (player.isPaused() && player.getPlayingTrack() != null) {
             player.setPaused(false);
         } else if (!playList.isEmpty() && player.getPlayingTrack() == null) {
-            player.playTrack(playList.remove(0).audioTrack);
+            AudioTrackView trackView = playList.remove(0);
+            player.playTrack(trackView.audioTrack.makeClone());
+            if (Interface.instance.repeatCheck.isSelected())
+                playList.add(trackView);
         }
     }
 
@@ -172,7 +175,10 @@ class DiscordManager {
     void next() {
         if (player.getPlayingTrack() != null && !playList.isEmpty()) {
             boolean isPaused = player.isPaused();
-            player.playTrack(playList.remove(0).audioTrack);
+            AudioTrackView trackView = playList.remove(0);
+            player.playTrack(trackView.audioTrack.makeClone());
+            if (Interface.instance.repeatCheck.isSelected())
+                playList.add(trackView);
             AudioTrack audioTrack = player.getPlayingTrack();
             if (Config.config.botGame.equals(""))
                 DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
@@ -183,8 +189,6 @@ class DiscordManager {
     void stop() {
         if (player.getPlayingTrack() != null)
             player.stopTrack();
-        if (!playList.isEmpty())
-            playList.clear();
     }
 
     void setVolume(int volume) {
@@ -262,7 +266,10 @@ class DiscordManager {
 
         private void next() {
             if (!playList.isEmpty()) {
-                player.playTrack(playList.remove(0).audioTrack);
+                AudioTrackView trackView = playList.remove(0);
+                player.playTrack(trackView.audioTrack.makeClone());
+                if (Interface.instance.repeatCheck.isSelected())
+                    playList.add(trackView);
                 AudioTrack audioTrack = player.getPlayingTrack();
                 if (Config.config.botGame.equals(""))
                     DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));

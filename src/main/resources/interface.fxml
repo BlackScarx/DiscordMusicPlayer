@@ -1,111 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="mainPane" fx:id="mainPane" maxHeight="-Infinity"
-            maxWidth="-Infinity"
-            minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0"
-            xmlns="http://javafx.com/javafx/8.0.111" fx:controller="net.blackscarx.discordmusicplayer.Interface">
-    <VBox layoutX="430.0" layoutY="170.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0"
-          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+<AnchorPane id="mainPane" fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.blackscarx.discordmusicplayer.Interface">
+    <VBox layoutX="430.0" layoutY="170.0" prefHeight="540.0" prefWidth="960.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <MenuBar>
             <Menu mnemonicParsing="false" text="Bot">
-                <MenuItem mnemonicParsing="false" onAction="#showInfo" text="%info"/>
-                <MenuItem mnemonicParsing="false" onAction="#renameBot" text="%renameBot"/>
-                <MenuItem mnemonicParsing="false" onAction="#showSettings" text="%settings"/>
-                <MenuItem mnemonicParsing="false" onAction="#logout" text="%logout"/>
+                <MenuItem mnemonicParsing="false" onAction="#showInfo" text="%info" />
+                <MenuItem mnemonicParsing="false" onAction="#renameBot" text="%renameBot" />
+                <MenuItem mnemonicParsing="false" onAction="#showSettings" text="%settings" />
+                <MenuItem mnemonicParsing="false" onAction="#logout" text="%logout" />
             </Menu>
             <Menu mnemonicParsing="false" text="Playlist">
-                <MenuItem mnemonicParsing="false" onAction="#clearPlaylist" text="%clearPlaylist"/>
-                <MenuItem mnemonicParsing="false" onAction="#loadPlaylist" text="%loadPlaylist"/>
-                <MenuItem mnemonicParsing="false" onAction="#savePlaylist" text="%savePlaylist"/>
+                <MenuItem mnemonicParsing="false" onAction="#clearPlaylist" text="%clearPlaylist" />
+                <MenuItem mnemonicParsing="false" onAction="#loadPlaylist" text="%loadPlaylist" />
+                <MenuItem mnemonicParsing="false" onAction="#savePlaylist" text="%savePlaylist" />
+            <CheckMenuItem fx:id="repeatCheck" mnemonicParsing="false" text="Repeat" />
             </Menu>
             <Menu mnemonicParsing="false" text="%about">
-                <MenuItem mnemonicParsing="false" onAction="#showAbout" text="%about"/>
-                <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate"/>
-                <MenuItem mnemonicParsing="false" onAction="#licence" text="Licence"/>
+                <MenuItem mnemonicParsing="false" onAction="#showAbout" text="%about" />
+                <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate" />
+                <MenuItem mnemonicParsing="false" onAction="#licence" text="Licence" />
             </Menu>
         </MenuBar>
         <HBox alignment="CENTER" prefHeight="100000.0" prefWidth="100000.0">
             <AnchorPane prefHeight="100000.0" prefWidth="100000.0">
-                <ComboBox fx:id="guilds" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="170.0"
-                          promptText="%chooseGuild"/>
-                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="190.0" layoutY="14.0" onMouseClicked="#addGuild"
-                           pickOnBounds="true" preserveRatio="true">
+                <ComboBox fx:id="guilds" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="170.0" promptText="%chooseGuild" />
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="190.0" layoutY="14.0" onMouseClicked="#addGuild" pickOnBounds="true" preserveRatio="true">
                     <effect>
-                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0"/>
+                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0" />
                     </effect>
-                    <Image url="@img/addserver.png"/>
+                    <Image url="@img/addserver.png" />
                 </ImageView>
-                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="222.0" layoutY="14.0" onMouseClicked="#refresh"
-                           pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="222.0" layoutY="14.0" onMouseClicked="#refresh" pickOnBounds="true" preserveRatio="true">
                     <effect>
-                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0"/>
+                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0" />
                     </effect>
-                    <Image url="@img/refresh.png"/>
+                    <Image url="@img/refresh.png" />
                 </ImageView>
-                <ComboBox fx:id="channels" layoutX="253.0" layoutY="14.0" prefHeight="25.0" prefWidth="170.0"
-                          promptText="%chooseChannel"/>
-                <Button layoutX="434.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#connect" text="Go"/>
+                <ComboBox fx:id="channels" layoutX="253.0" layoutY="14.0" prefHeight="25.0" prefWidth="170.0" promptText="%chooseChannel" />
+                <Button layoutX="434.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#connect" text="Go" />
             </AnchorPane>
             <AnchorPane prefHeight="100000.0" prefWidth="100000.0">
-                <TextField fx:id="link" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="384.0"
-                           promptText="Link or Keyword"/>
-                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="407.0" layoutY="14.0" onMouseClicked="#fileEx"
-                           pickOnBounds="true" preserveRatio="true">
-                    <Image url="@img/file.png"/>
+                <TextField fx:id="link" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="384.0" promptText="Link or Keyword" />
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="407.0" layoutY="14.0" onMouseClicked="#fileEx" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@img/file.png" />
                     <effect>
-                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0"/>
+                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0" />
                     </effect>
                 </ImageView>
-                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="441.0" layoutY="14.0" onMouseClicked="#addLink"
-                           pickOnBounds="true" preserveRatio="true">
-                    <Image url="@img/addserver.png"/>
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="441.0" layoutY="14.0" onMouseClicked="#addLink" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@img/addserver.png" />
                     <effect>
-                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0"/>
+                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0" />
                     </effect>
                 </ImageView>
-                <ImageView fx:id="playPause" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="52.0"
-                           onMouseClicked="#playPause" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="playPause" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="52.0" onMouseClicked="#playPause" pickOnBounds="true" preserveRatio="true">
                     <effect>
-                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0"/>
+                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0" />
                     </effect>
-                    <Image url="@img/play.png"/>
+                    <Image url="@img/play.png" />
                 </ImageView>
-                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="46.0" layoutY="52.0" onMouseClicked="#stop"
-                           pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="46.0" layoutY="52.0" onMouseClicked="#stop" pickOnBounds="true" preserveRatio="true">
                     <effect>
-                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0"/>
+                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0" />
                     </effect>
-                    <Image url="@img/stop.png"/>
+                    <Image url="@img/stop.png" />
                 </ImageView>
-                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="77.0" layoutY="52.0" onMouseClicked="#next"
-                           pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="77.0" layoutY="52.0" onMouseClicked="#next" pickOnBounds="true" preserveRatio="true">
                     <effect>
-                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0"/>
+                        <DropShadow color="#ffffffcd" height="24.0" radius="12.5" spread="0.30" width="24.0" />
                     </effect>
-                    <Image url="@img/next.png"/>
+                    <Image url="@img/next.png" />
                 </ImageView>
-                <TableView fx:id="playList" layoutX="15.0" layoutY="91.0" onMouseClicked="#showOption"
-                           prefHeight="410.0" prefWidth="450.0">
+                <TableView fx:id="playList" layoutX="15.0" layoutY="91.0" onMouseClicked="#showOption" prefHeight="410.0" prefWidth="450.0">
                     <columns>
-                        <TableColumn fx:id="id" prefWidth="30" text="id"/>
-                        <TableColumn fx:id="name" prefWidth="300" text="%musicName"/>
-                        <TableColumn fx:id="duration" prefWidth="105" text="%duration"/>
+                        <TableColumn fx:id="id" prefWidth="30" text="id" />
+                        <TableColumn fx:id="name" prefWidth="300" text="%musicName" />
+                        <TableColumn fx:id="duration" prefWidth="105" text="%duration" />
                     </columns>
                 </TableView>
-                <ProgressBar fx:id="progress" layoutX="121.0" layoutY="68.0" prefHeight="10.0" prefWidth="345.0"/>
-                <Label fx:id="info" alignment="CENTER" contentDisplay="CENTER" layoutX="121.0" layoutY="44.0"
-                       prefHeight="17.0" prefWidth="345.0" text="%noMusic" textAlignment="CENTER" textFill="WHITE">
+                <ProgressBar fx:id="progress" layoutX="121.0" layoutY="68.0" prefHeight="10.0" prefWidth="345.0" />
+                <Label fx:id="info" alignment="CENTER" contentDisplay="CENTER" layoutX="121.0" layoutY="44.0" prefHeight="17.0" prefWidth="345.0" text="%noMusic" textAlignment="CENTER" textFill="WHITE">
                     <font>
-                        <Font name="System Bold" size="12.0"/>
+                        <Font name="System Bold" size="12.0" />
                     </font>
                 </Label>
-                <Slider fx:id="volume" layoutY="91.0" orientation="VERTICAL" prefHeight="410.0" prefWidth="14.0"
-                        value="40.0"/>
+                <Slider fx:id="volume" layoutY="91.0" orientation="VERTICAL" prefHeight="410.0" prefWidth="14.0" value="40.0" />
             </AnchorPane>
         </HBox>
     </VBox>
