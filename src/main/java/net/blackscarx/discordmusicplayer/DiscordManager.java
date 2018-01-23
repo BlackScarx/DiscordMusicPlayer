@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Toggle;
 import javafx.scene.image.Image;
 import javafx.stage.StageStyle;
 import net.blackscarx.discordmusicplayer.object.AudioPlayerSendHandler;
@@ -123,7 +124,7 @@ class DiscordManager {
                 }).setApplicationName("DiscordMusicPlayer").build();
                 try {
                     YouTube.Search.List search = youtube.search().list("id,snippet");
-                    search.setKey("AIzaSyBbS5X3Cf5yJilL5c2m9D3-pX72dRTLdhw");
+                    search.setKey("AIzaSyBJOc9eQgE0a6A1vep2lkGPGg2n7nrk4Cg");
                     search.setQ(source);
                     search.setType("video");
                     search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/high/url)");
@@ -161,7 +162,8 @@ class DiscordManager {
         } else if (!playList.isEmpty() && player.getPlayingTrack() == null) {
             AudioTrackView trackView = playList.remove(0);
             player.playTrack(trackView.audioTrack.makeClone());
-            if (Interface.instance.repeatCheck.isSelected())
+            Toggle mode = Interface.instance.mode.getSelectedToggle();
+            if (mode.equals(Interface.instance.repeatMode))
                 playList.add(trackView);
         }
     }
@@ -177,7 +179,8 @@ class DiscordManager {
             boolean isPaused = player.isPaused();
             AudioTrackView trackView = playList.remove(0);
             player.playTrack(trackView.audioTrack.makeClone());
-            if (Interface.instance.repeatCheck.isSelected())
+            Toggle mode = Interface.instance.mode.getSelectedToggle();
+            if (mode.equals(Interface.instance.repeatMode))
                 playList.add(trackView);
             AudioTrack audioTrack = player.getPlayingTrack();
             if (Config.config.botGame.equals(""))
@@ -236,7 +239,11 @@ class DiscordManager {
         public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
             Interface.instance.playPause.setImage(new Image("/img/play.png"));
             if (endReason.equals(AudioTrackEndReason.FINISHED)) {
-                next();
+                if (Interface.instance.mode.getSelectedToggle().equals(Interface.instance.repeatOneMode)) {
+                    player.playTrack(track.makeClone());
+                } else {
+                    next();
+                }
             }
         }
 
@@ -268,7 +275,8 @@ class DiscordManager {
             if (!playList.isEmpty()) {
                 AudioTrackView trackView = playList.remove(0);
                 player.playTrack(trackView.audioTrack.makeClone());
-                if (Interface.instance.repeatCheck.isSelected())
+                Toggle mode = Interface.instance.mode.getSelectedToggle();
+                if (mode.equals(Interface.instance.repeatMode))
                     playList.add(trackView);
                 AudioTrack audioTrack = player.getPlayingTrack();
                 if (Config.config.botGame.equals(""))

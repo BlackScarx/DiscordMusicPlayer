@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DiscordMusicPlayerFX.iml" filepath="$PROJECT_DIR$/DiscordMusicPlayerFX.iml" />
+      <module fileurl="file://$PROJECT_DIR$/discordmusicplayer.iml" filepath="$PROJECT_DIR$/discordmusicplayer.iml" />
     </modules>
   </component>
 </project>

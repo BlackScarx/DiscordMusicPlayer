@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="70.0" maxWidth="600.0" minHeight="70.0" minWidth="600.0"
           prefHeight="70.0"
-          prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111"
+          prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0"
           fx:controller="net.blackscarx.discordmusicplayer.Login">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0"/>

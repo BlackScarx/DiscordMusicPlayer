@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -60,13 +59,16 @@ public class Interface implements Initializable {
     public Slider volume;
     public ImageView playPause;
     public AnchorPane mainPane;
-    public CheckMenuItem repeatCheck;
+    public RadioMenuItem normalMode;
+    public RadioMenuItem repeatMode;
+    public RadioMenuItem repeatOneMode;
+    public ToggleGroup mode;
     ChangeListener<Guild> changeGuild = new ChangeListener<Guild>() {
         @Override
         public void changed(ObservableValue<? extends Guild> observable, Guild oldValue, Guild newValue) {
             if (newValue == null)
                 return;
-            if (oldValue == null || !newValue.equals(oldValue)) {
+            if (!newValue.equals(oldValue)) {
                 if (oldValue != null) {
                     if (DiscordMusicPlayer.manager.channelId != null)
                         DiscordMusicPlayer.manager.disconnectChannel();
@@ -296,7 +298,7 @@ public class Interface implements Initializable {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
         about.initStyle(StageStyle.UTILITY);
         about.setTitle(DiscordMusicPlayer.lang.getString("about"));
-        about.setContentText("Author: BlackScarx\nVersion: 3.3.2");
+        about.setContentText("Author: BlackScarx\nVersion: 3.4.0");
         about.showAndWait();
     }
 

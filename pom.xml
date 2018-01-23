@@ -6,7 +6,7 @@
 
     <groupId>net.blackscarx</groupId>
     <artifactId>discordmusicplayer</artifactId>
-    <version>3.3.4</version>
+    <version>3.4.0</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -56,12 +56,12 @@
         <dependency>
             <groupId>com.sedmelluq</groupId>
             <artifactId>lavaplayer</artifactId>
-            <version>1.2.43</version>
+            <version>1.2.9</version>
         </dependency>
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.3.0_265</version>
+            <version>3.5.0_329</version>
         </dependency>
         <dependency>
             <groupId>com.neovisionaries</groupId>
@@ -78,7 +78,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.5</version>
+            <version>3.7</version>
             <type>pom</type>
         </dependency>
         <dependency>
@@ -90,19 +90,19 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20160810</version>
+            <version>20171018</version>
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
-            <version>4.2.2</version>
+            <version>4.5.1</version>
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>21.0</version>
+            <version>23.6-jre</version>
         </dependency>
         <dependency>
             <groupId>org.ini4j</groupId>
