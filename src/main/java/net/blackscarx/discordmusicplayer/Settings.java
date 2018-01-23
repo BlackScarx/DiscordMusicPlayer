@@ -68,7 +68,7 @@ public class Settings implements Initializable {
             Config.config.lang = builder.substring(builder.length() - 2);
             Config.config.botGame = botGame.getText();
             if (!botGame.getText().equals(""))
-                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(botGame.getText()));
+                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT, botGame.getText()));
             if (backgroundString != null) {
                 Config.config.background = backgroundString;
                 Interface.instance.mainPane.setBackground(Utils.getBackground(Utils.stringToImage(backgroundString)));

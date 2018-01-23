@@ -1,5 +1,7 @@
 package net.blackscarx.discordmusicplayer;
 
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -71,9 +73,9 @@ class DiscordManager {
             alert.showAndWait();
         }
         if (Config.config.botGame.equals(""))
-            jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
+            jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT,"powered by DiscordMusicPlayer"));
         else
-            jda.getPresence().setGame(Game.of(Config.config.botGame));
+            jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT,Config.config.botGame));
         AudioSourceManagers.registerRemoteSources(remoteManager);
         AudioSourceManagers.registerLocalSource(localManager);
         player.addListener(new Musique());
@@ -184,7 +186,7 @@ class DiscordManager {
                 playList.add(trackView);
             AudioTrack audioTrack = player.getPlayingTrack();
             if (Config.config.botGame.equals(""))
-                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
+                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT, !audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
             player.setPaused(isPaused);
         }
     }
@@ -280,7 +282,7 @@ class DiscordManager {
                     playList.add(trackView);
                 AudioTrack audioTrack = player.getPlayingTrack();
                 if (Config.config.botGame.equals(""))
-                    DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(!audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
+                    DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT, !audioTrack.getInfo().title.equals("Unknown title") ? audioTrack.getInfo().title : new File(audioTrack.getIdentifier()).getName().substring(0, new File(audioTrack.getIdentifier()).getName().lastIndexOf('.'))));
             }
         }
     }
@@ -304,12 +306,12 @@ class DiscordManager {
                     setTitle(audioTrack);
                     if (i == 0) {
                         if (Config.config.botGame.equals(""))
-                            DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(title));
+                            DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT,title));
                         else
-                            DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Config.config.botGame));
+                            DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT,Config.config.botGame));
                         isTitle = true;
                     } else if (i == 150) {
-                        DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
+                        DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT,"powered by DiscordMusicPlayer"));
                         isTitle = false;
                     } else if (i == 200) {
                         i = -1;
@@ -321,7 +323,7 @@ class DiscordManager {
                     });
                 } else {
                     if (isTitle) {
-                        DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
+                        DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT,"powered by DiscordMusicPlayer"));
                         isTitle = false;
                     }
                     Platform.runLater(() -> {
@@ -336,7 +338,7 @@ class DiscordManager {
                 }
             }
             if (isTitle) {
-                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
+                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT,"powered by DiscordMusicPlayer"));
                 isTitle = false;
             }
             Platform.runLater(() -> {
