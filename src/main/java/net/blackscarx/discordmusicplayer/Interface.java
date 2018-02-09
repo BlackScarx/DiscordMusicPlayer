@@ -134,7 +134,7 @@ public class Interface implements Initializable {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle(DiscordMusicPlayer.lang.getString("chooseFileTitle"));
             fileChooser.getExtensionFilters().clear();
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Multimedia", "*.mp3", "*.mp4", "*.flac", "*.aac", "*.mkv", "*.webm", "*.m4a", "*.ogg", "*.m3u", "*.pls"));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Multimedia", "*.mp3", "*.mp4", "*.flac", "*.aac", "*.mkv", "*.webm", "*.m4a", "*.ogg", "*.m3u", "*.wav", "*.pls"));
             fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
             List<File> music = fileChooser.showOpenMultipleDialog(DiscordMusicPlayer.instance.stage);
             if (music != null) {
@@ -298,7 +298,7 @@ public class Interface implements Initializable {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
         about.initStyle(StageStyle.UTILITY);
         about.setTitle(DiscordMusicPlayer.lang.getString("about"));
-        about.setContentText("Author: BlackScarx\nVersion: 3.4.1");
+        about.setContentText("Author: BlackScarx\nVersion: 3.4.3");
         about.showAndWait();
     }
 

@@ -6,7 +6,7 @@
 
     <groupId>net.blackscarx</groupId>
     <artifactId>discordmusicplayer</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.3</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -56,12 +56,12 @@
         <dependency>
             <groupId>com.sedmelluq</groupId>
             <artifactId>lavaplayer</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.47</version>
         </dependency>
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.5.0_329</version>
+            <version>3.5.0_336</version>
         </dependency>
         <dependency>
             <groupId>com.neovisionaries</groupId>
