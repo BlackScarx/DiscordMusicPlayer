@@ -6,7 +6,7 @@
 
     <groupId>net.blackscarx</groupId>
     <artifactId>discordmusicplayer</artifactId>
-    <version>3.4.3</version>
+    <version>3.4.4</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
