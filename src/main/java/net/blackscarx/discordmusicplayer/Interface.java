@@ -8,10 +8,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -25,10 +25,10 @@ import javafx.util.StringConverter;
 import net.blackscarx.discordmusicplayer.object.AudioTrackView;
 import net.blackscarx.discordmusicplayer.object.Config;
 import net.blackscarx.discordmusicplayer.object.Playlist;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.exceptions.PermissionException;
-import net.dv8tion.jda.core.managers.AccountManager;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.internal.managers.AccountManagerImpl;
 import org.controlsfx.dialog.ExceptionDialog;
 
 import java.awt.*;
@@ -219,7 +219,7 @@ public class Interface implements Initializable {
         if (alert.getResult().equals(ButtonType.OK)) {
             if (!newName.getText().equals(DiscordMusicPlayer.manager.jda.getSelfUser().getName())) {
                 try {
-                    new AccountManager(DiscordMusicPlayer.manager.jda.getSelfUser()).setName(newName.getText()).complete();
+                    new AccountManagerImpl(DiscordMusicPlayer.manager.jda.getSelfUser()).setName(newName.getText()).complete();
                 } catch (Exception e) {
                     ExceptionDialog warn = new ExceptionDialog(e);
                     warn.showAndWait();

@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import net.blackscarx.discordmusicplayer.object.Config;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.entities.Activity;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
@@ -68,7 +68,7 @@ public class Settings implements Initializable {
             Config.config.lang = builder.substring(builder.length() - 2);
             Config.config.botGame = botGame.getText();
             if (!botGame.getText().equals(""))
-                DiscordMusicPlayer.manager.jda.getPresence().setGame(Game.of(Game.GameType.DEFAULT, botGame.getText()));
+                DiscordMusicPlayer.manager.jda.getPresence().setActivity(Activity.playing(botGame.getText()));
             if (backgroundString != null) {
                 Config.config.background = backgroundString;
                 Interface.instance.mainPane.setBackground(Utils.getBackground(Utils.stringToImage(backgroundString)));

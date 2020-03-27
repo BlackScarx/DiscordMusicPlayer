@@ -11,7 +11,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.StageStyle;
 import net.blackscarx.discordmusicplayer.object.Config;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import org.controlsfx.dialog.ExceptionDialog;
 
 import javax.security.auth.login.LoginException;
