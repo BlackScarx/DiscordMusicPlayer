@@ -38,7 +38,7 @@ public class Login implements Initializable {
                 tokenField.setDisable(true);
                 DiscordMusicPlayer.manager = new DiscordManager(tokenField.getText());
                 Config.config.token = tokenField.getText();
-                Config.save();
+                Config.config.save();
                 Parent interfaceParent = FXMLLoader.load(DiscordMusicPlayer.class.getResource("/interface.fxml"), DiscordMusicPlayer.lang);
                 DiscordMusicPlayer.instance.stage.setScene(new Scene(interfaceParent));
             } catch (LoginException | InterruptedException | RateLimitedException e) {

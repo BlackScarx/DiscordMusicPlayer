@@ -17,11 +17,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="discordmusicplayer" />
-        <module name="DiscordMusicPlayerFX" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="discordmusicplayer" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -33,6 +33,7 @@ public class Settings implements Initializable {
     public AnchorPane main;
     public TextField background;
     public TextField botGame;
+    public TextField googleApiKey;
     private String backgroundString = null;
 
     @Override
@@ -53,6 +54,7 @@ public class Settings implements Initializable {
         });
         langs.setValue(DiscordMusicPlayer.lang);
         botGame.setText(Config.config.botGame);
+        googleApiKey.setText(Config.config.googleApiKey);
     }
 
     public void close(MouseEvent mouseEvent) {
@@ -67,6 +69,7 @@ public class Settings implements Initializable {
             StringBuilder builder = new StringBuilder(langs.getValue().getBaseBundleName());
             Config.config.lang = builder.substring(builder.length() - 2);
             Config.config.botGame = botGame.getText();
+            Config.config.googleApiKey = googleApiKey.getText();
             if (!botGame.getText().equals(""))
                 DiscordMusicPlayer.manager.jda.getPresence().setActivity(Activity.playing(botGame.getText()));
             if (backgroundString != null) {
@@ -86,7 +89,7 @@ public class Settings implements Initializable {
                     e.printStackTrace();
                 }
             }
-            Config.save();
+            Config.config.save();
             settings.getScene().setRoot(FXMLLoader.load(DiscordMusicPlayer.class.getResource("/settings.fxml"), DiscordMusicPlayer.lang));
             double volume = Interface.instance.volume.getValue();
             DiscordMusicPlayer.instance.stage.getScene().setRoot(FXMLLoader.load(DiscordMusicPlayer.class.getResource("/interface.fxml"), DiscordMusicPlayer.lang));

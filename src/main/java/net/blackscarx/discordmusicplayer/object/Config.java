@@ -1,25 +1,32 @@
 package net.blackscarx.discordmusicplayer.object;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
 import java.io.*;
 
 /**
  * Created by BlackScarx on 30-04-17. BlackScarx All right reserved
  */
-public class Config implements Serializable {
+public class Config {
 
     public static Config config;
-    private static String home = System.getProperty("user.home");
-    private static File saveFile = new File(home, "DiscordMusicPlayer");
-    private static File configFile = new File(saveFile, "config.dmp");
+    private static final String home = System.getProperty("user.home");
+    private static final File saveFile = new File(home, "DiscordMusicPlayer");
+    private static final File configFile = new File(saveFile, "config.json");
 
     static {
         config = new Config();
     }
 
+    private Config() {}
+
     public String token = "";
     public String background = "";
     public String lang = "";
     public String botGame = "";
+    public String googleApiKey = "";
 
     public static void load() {
         if (!saveFile.exists() || !saveFile.isDirectory()) {
@@ -27,21 +34,17 @@ public class Config implements Serializable {
         }
         if (configFile.exists()) {
             try {
-                FileInputStream is = new FileInputStream(configFile);
-                ObjectInputStream ois = new ObjectInputStream(is);
-                config = (Config) ois.readObject();
-                ois.close();
-                is.close();
-            } catch (IOException | ClassNotFoundException | ClassCastException e) {
+                ObjectReader reader = new ObjectMapper().reader();
+                config = reader.readValue(configFile, Config.class);
+            } catch (IOException | ClassCastException e) {
                 e.printStackTrace();
                 config = new Config();
             }
-        } else {
-            config = new Config();
         }
     }
 
-    public static void save() {
+    public void save() {
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         if (!saveFile.exists() || !saveFile.isDirectory()) {
             saveFile.mkdir();
         }
@@ -49,11 +52,9 @@ public class Config implements Serializable {
             config = new Config();
         }
         try {
+            String configValue = ow.writeValueAsString(this);
             FileOutputStream os = new FileOutputStream(configFile);
-            ObjectOutputStream oos = new ObjectOutputStream(os);
-            oos.writeObject(config);
-            oos.flush();
-            oos.close();
+            os.write(configValue.getBytes());
             os.close();
         } catch (IOException e) {
             e.printStackTrace();

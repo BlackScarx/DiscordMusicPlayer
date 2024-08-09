@@ -1,5 +1,6 @@
 package net.blackscarx.discordmusicplayer;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -15,13 +16,11 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.Toggle;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.StageStyle;
 import net.blackscarx.discordmusicplayer.object.AudioPlayerSendHandler;
@@ -31,8 +30,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.exceptions.AccountTypeException;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
 
 import javax.security.auth.login.LoginException;
@@ -58,9 +57,12 @@ class DiscordManager {
     private boolean noMatch = false;
 
     DiscordManager(String token) throws LoginException, InterruptedException, RateLimitedException {
+        YoutubeAudioSourceManager ytSourceManager = new dev.lavalink.youtube.YoutubeAudioSourceManager(true);
+        remoteManager.registerSourceManager(ytSourceManager);
+        AudioSourceManagers.registerRemoteSources(remoteManager, com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager.class);
         try {
             jda = JDABuilder.createDefault(token).setBulkDeleteSplittingEnabled(false).build();
-        } catch (AccountTypeException e) {
+        } catch (PermissionException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING, DiscordMusicPlayer.lang.getString("warningClient"));
             alert.initStyle(StageStyle.UTILITY);
             alert.setTitle(DiscordMusicPlayer.lang.getString("warningClientTitle"));
@@ -117,11 +119,25 @@ class DiscordManager {
             add.get();
             if (noMatch) {
                 noMatch = false;
+                if (Config.config.googleApiKey.isEmpty()) {
+                    TextInputDialog dialog = new TextInputDialog();
+                    dialog.setTitle("Api key");
+                    dialog.setHeaderText("Configure your google api key");
+                    dialog.setContentText("Api key");
+                    dialog.showAndWait();
+                    System.out.println(dialog.getResult());
+                    String result = dialog.getResult();
+                    if (result == null) {
+                        return;
+                    }
+                    Config.config.googleApiKey = dialog.getResult();
+                    Config.config.save();
+                }
                 YouTube youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), httpRequest -> {
                 }).setApplicationName("DiscordMusicPlayer").build();
                 try {
                     YouTube.Search.List search = youtube.search().list("id,snippet");
-                    search.setKey("AIzaSyBJOc9eQgE0a6A1vep2lkGPGg2n7nrk4Cg");
+                    search.setKey(Config.config.googleApiKey);
                     search.setQ(source);
                     search.setType("video");
                     search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/high/url)");
@@ -141,6 +157,14 @@ class DiscordManager {
                                 }
                             }
                         }
+                    }
+                } catch (GoogleJsonResponseException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage() + "\nRetry ?", ButtonType.YES, ButtonType.CANCEL);
+                    alert.setTitle("Wrong api key");
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.YES) {
+                        Config.config.googleApiKey = "";
+                        addSource(source, isRemote);
                     }
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -200,6 +224,10 @@ class DiscordManager {
             if (!player.isPaused())
                 return true;
         return false;
+    }
+
+    public void playTrack(AudioTrack track) {
+        this.player.playTrack(track.makeClone());
     }
 
     class AudioLoad implements AudioLoadResultHandler {

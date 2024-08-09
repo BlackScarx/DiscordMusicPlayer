@@ -25,7 +25,7 @@ public class DiscordMusicPlayer extends Application {
     static DiscordMusicPlayer instance;
 
     Stage stage;
-    private EventHandler<WindowEvent> close = event -> {
+    private final EventHandler<WindowEvent> close = event -> {
         if (manager != null)
             manager.jda.shutdown();
         System.exit(0);
@@ -44,7 +44,7 @@ public class DiscordMusicPlayer extends Application {
         }
         if (Strings.isNullOrEmpty(Config.config.lang)) {
             Config.config.lang = Locale.getDefault().getLanguage();
-            Config.save();
+            Config.config.save();
         }
         if (langs.containsKey(Config.config.lang))
             lang = langs.get(Config.config.lang);

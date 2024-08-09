@@ -26,7 +26,7 @@ import net.blackscarx.discordmusicplayer.object.AudioTrackView;
 import net.blackscarx.discordmusicplayer.object.Config;
 import net.blackscarx.discordmusicplayer.object.Playlist;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.internal.managers.AccountManagerImpl;
 import org.controlsfx.dialog.ExceptionDialog;
@@ -40,6 +40,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by BlackScarx on 02-05-17. BlackScarx All right reserved
@@ -62,6 +64,7 @@ public class Interface implements Initializable {
     public RadioMenuItem normalMode;
     public RadioMenuItem repeatMode;
     public RadioMenuItem repeatOneMode;
+    public Boolean mouseClicked = false;
     public ToggleGroup mode;
     ChangeListener<Guild> changeGuild = new ChangeListener<Guild>() {
         @Override
@@ -92,7 +95,7 @@ public class Interface implements Initializable {
             InputStream in = DiscordMusicPlayer.class.getResourceAsStream("/img/background.txt");
             byte[] imgB = Utils.inputStreamToByteArray(in);
             Config.config.background = new String(imgB);
-            Config.save();
+            Config.config.save();
         }
         mainPane.setBackground(Utils.getBackground(Utils.stringToImage(Config.config.background)));
         id.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getTableView().getItems().indexOf(param.getValue()) + 1));
@@ -291,6 +294,20 @@ public class Interface implements Initializable {
             });
             menu.getItems().add(menuItem);
             menu.show(DiscordMusicPlayer.instance.stage, mouseEvent.getScreenX(), mouseEvent.getScreenY());
+        } else if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+            if (!mouseClicked) {
+                mouseClicked = true;
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    public void run() {
+                        mouseClicked = false;
+                    }
+                }, 500);
+            } else {
+                mouseClicked = false;
+                AudioTrackView clicked = playList.getSelectionModel().getSelectedItem();
+                DiscordMusicPlayer.manager.playTrack(clicked.audioTrack);
+            }
         }
     }
 
@@ -298,14 +315,14 @@ public class Interface implements Initializable {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
         about.initStyle(StageStyle.UTILITY);
         about.setTitle(DiscordMusicPlayer.lang.getString("about"));
-        about.setContentText("Author: BlackScarx\nVersion: 3.4.5");
+        about.setContentText("Author: BlackScarx\nVersion: 3.5.0");
         about.showAndWait();
     }
 
     public void donate() {
         if (Desktop.isDesktopSupported()) {
             try {
-                Desktop.getDesktop().browse(new URI("https://www.paypal.me/BlackScarx"));
+                Desktop.getDesktop().browse(new URI("https://buymeacoffee.com/blackscarx"));
             } catch (IOException | URISyntaxException e1) {
                 e1.printStackTrace();
             }

@@ -16,17 +16,14 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Base64;
-import java.util.Date;
 
 /**
  * Created by BlackScarx on 02-05-17. BlackScarx All right reserved
  */
 public class Utils {
 
-    static javafx.scene.image.Image makeRoundedCorner(BufferedImage image) {
+    static Image makeRoundedCorner(BufferedImage image) {
         int w = image.getWidth();
         int h = image.getHeight();
         BufferedImage output = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
@@ -90,14 +87,15 @@ public class Utils {
     }
 
     public static String getFormattedTime(Long duration) {
-        Date dur = new Date(duration);
-        DateFormat format = new SimpleDateFormat("H:m:ss");
-        String durString = format.format(dur);
-        DateFormat h = new SimpleDateFormat("H");
-        if (Integer.valueOf(h.format(dur)) == 1) {
-            durString = durString.replaceFirst("1:", "");
-        } else {
-            durString = durString.replaceFirst(h.format(dur), String.valueOf((Integer.valueOf(h.format(dur)) - 1)));
+        long seconds = ((long) Math.floor(duration.floatValue() / 1000));
+        long cSeconds = seconds % 60;
+        long minutes = seconds / 60 % 60;
+        long hours = (long) Math.floor((double) seconds / 3600);
+        String durString = String.format("%02d", cSeconds);
+        if (hours > 0) {
+            durString = hours + ":" + String.format("%02d", minutes) + ":" + durString;
+        } else if (minutes > 0) {
+            durString = minutes + ":" + durString;
         }
         return durString;
     }

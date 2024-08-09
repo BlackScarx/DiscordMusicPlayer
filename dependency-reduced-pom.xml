@@ -3,29 +3,51 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.blackscarx</groupId>
   <artifactId>discordmusicplayer</artifactId>
-  <version>3.4.5</version>
+  <name>discordmusicplayer</name>
+  <version>3.5.0</version>
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>3.4.2</version>
         <configuration>
           <archive>
             <manifest>
-              <mainClass>net.blackscarx.discordmusicplayer.DiscordMusicPlayer</mainClass>
+              <mainClass>net.blackscarx.discordmusicplayer.Launcher</mainClass>
             </manifest>
           </archive>
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <jlinkImageName>discordmusicplayer</jlinkImageName>
+          <launcher>launcher</launcher>
+          <mainClass>net.blackscarx.discordmusicplayer.Launcher</mainClass>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+      </plugin>
+      <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4.3</version>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <phase>package</phase>
             <goals>
               <goal>shade</goal>
             </goals>
+            <configuration>
+              <transformers>
+                <transformer>
+                  <mainClass>net.blackscarx.discordmusicplayer.Launcher</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -33,16 +55,21 @@
   </build>
   <repositories>
     <repository>
-      <id>central</id>
-      <name>bintray</name>
-      <url>https://jcenter.bintray.com</url>
+      <id>jitpack</id>
+      <name>jitpack</name>
+      <url>https://jitpack.io</url>
+    </repository>
+    <repository>
+      <id>lavalink</id>
+      <name>lavalink</name>
+      <url>https://maven.lavalink.dev/releases</url>
     </repository>
   </repositories>
   <dependencies>
     <dependency>
       <groupId>com.neovisionaries</groupId>
       <artifactId>nv-websocket-client</artifactId>
-      <version>2.9</version>
+      <version>2.14</version>
       <type>pom</type>
       <scope>compile</scope>
     </dependency>
@@ -63,30 +90,45 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-collections4</artifactId>
-      <version>4.1</version>
+      <version>4.4</version>
+      <type>pom</type>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>22.0.1</version>
+      <type>pom</type>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>22.0.1</version>
       <type>pom</type>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20171018</version>
+      <version>20240303</version>
       <type>pom</type>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>net.java.dev.jna</groupId>
       <artifactId>jna</artifactId>
-      <version>4.5.1</version>
+      <version>5.14.0</version>
       <type>pom</type>
       <scope>compile</scope>
     </dependency>
   </dependencies>
   <properties>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <javafx.version>22</javafx.version>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 </project>
-
